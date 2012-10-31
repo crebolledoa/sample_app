@@ -13,17 +13,18 @@ group :production do
 end
 
 group :development do
-	gem 'sqlite3'
 	gem 'rspec-rails'
+	gem 'sqlite3'
 	gem 'annotate'
 	gem 'faker'
 end
 
 group :test do
-	gem 'sqlite3'
 	gem 'rspec'
+	gem 'sqlite3'
 	gem 'webrat'
 	gem 'factory_girl_rails'
+	gem 'spork', '0.9.2'
 end
 
 
