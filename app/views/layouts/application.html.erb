@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Ruby on Rails Tutorial Sample App | <%= @title %></title>
-  <%= csrf_meta_tag %> <!-- to prevent cross-site request forgery (CSRF), a type of malicious web attack. -->
-</head>
-<body>
-	<%= yield %>
-</body>
+	<head>
+	  <title><%= title %></title><!--without '@' because it refers to a helper method-->
+	  <%= csrf_meta_tag %> <!-- to prevent cross-site request forgery (CSRF), a type of malicious web attack. -->
+	  <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
+	  <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
+	</head>
+	<body>
+		<%= yield %>
+	</body>
 </html>
