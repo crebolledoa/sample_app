@@ -3,10 +3,15 @@
 	<head>
 	  <title><%= title %></title><!--without '@' because it refers to a helper method-->
 	  <%= csrf_meta_tag %> <!-- to prevent cross-site request forgery (CSRF), a type of malicious web attack. -->
-	  <%= stylesheet_link_tag 'blueprint/screen', :media => 'screen' %>
-	  <%= stylesheet_link_tag 'blueprint/print', :media => 'print' %>
+	  <%= render 'layouts/stylesheets' %>
 	</head>
 	<body>
-		<%= yield %>
+		<div class="container">
+			<%= render 'layouts/header' %>
+			<section class="round">
+				<%= yield %>
+			</section>
+			<%= render 'layouts/footer' %>
+		</div>
 	</body>
 </html>
