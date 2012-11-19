@@ -135,7 +135,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
-  annotate
+  annotate (~> 2.5.0)
   coffee-rails (~> 3.2.1)
   factory_girl_rails
   faker

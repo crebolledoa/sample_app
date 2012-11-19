@@ -18,8 +18,8 @@ SampleApp::Application.configure do
   config.assets.compile = false
 
   #precompile:
-  config.assets.precompile += %w( app/assets/stylesheets/blueprint/screen.css )
-  config.assets.precompile += %w( app/assets/stylesheets/blueprint/print.css )
+  config.assets.precompile += %w( blueprint/screen.css )
+  config.assets.precompile += %w( blueprint/print.css )
 
   # Generate digests for assets URLs
   config.assets.digest = true
