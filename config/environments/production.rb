@@ -15,7 +15,7 @@ SampleApp::Application.configure do
   config.assets.compress = true
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = false
+  config.assets.compile = true #THIS SHOULD BE FALSE, BUT SINCE THE PRECOMPILE DOESN'T WORK FOR HEROKU, I NEEDED TO CHANGE IT :(
 
   #precompile:
   config.assets.precompile += %w( blueprint/screen.css )
