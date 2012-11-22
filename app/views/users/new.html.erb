@@ -1,2 +1,23 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<h1>Sign up</h1>
+<%= form_for(@user) do |f| %>
+	<%= render 'shared/error_messages' %> <!-- -it renders the partial '_error_messages.html.erb'-->
+	<div class="field"> <!-- creates the HTML needed to make a labeled text field element appropriate for setting the name attribute of a User model. it ensures that a POST request to /users is handled by the create action.-->
+		<%= f.label :name %><br />
+		<%= f.text_field :name %>
+	</div>
+	<div class="field">
+		<%= f.label :email %><br />
+		<%= f.text_field :email %>
+	</div>
+	<div class="field">
+		<%= f.label :password %><br />
+		<%= f.password_field :password %>
+	</div>
+	<div class="field">
+		<%= f.label :password_confirmation, "Confirmation" %><br />
+		<%= f.password_field :password_confirmation %>
+	</div>
+	<div class="actions">
+		<%= f.submit "Sign up" %> <!-- POST request to the '/users' URL-->
+	</div>
+<% end %>

@@ -1,6 +1,6 @@
 SampleApp::Application.routes.draw do
 
-  resources :users
+  resources :users #automatically ensures that our Rails application responds to the RESTful URLs
 
   match '/signup', :to => 'users#new'
   match '/contact', :to => 'pages#contact'

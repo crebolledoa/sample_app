@@ -42,14 +42,64 @@ describe UsersController do
   end
 
   describe "GET 'new'" do
+
     it "returns http success" do
-      get 'new'
+      get :new
       response.should be_success
     end
-
     it "should have the right title" do
-    	get 'new'
+    	get :new
     	response.should have_selector("title", :content => "Sign up")
+    end
+
+  end
+
+  describe "POST 'create'" do
+
+    describe "failure" do
+
+      before(:each) do
+        @attr = { :name => "", :email => "", :password => "", :password_confirmation => ""}
+      end
+
+      it "should not create a user" do #verify that a failed create action doesn’t create a user in the database
+        lambda do #to wrap the post :create step in a package using a Ruby construct called a lambda,2 which allows us to check that it doesn’t change the User count
+          post :create, :user => @attr
+        end.should_not change(User, :count) #change method to return the number of users in the database
+      end
+
+      it "should have the right title" do
+        post :create, :user => @attr
+        response.should have_selector('title', :content => "Sign up")
+      end
+
+      it "should render the 'new' page" do
+        post :create, :user => @attr
+        response.should render_template('new') 
+      end
+    end
+
+    describe "success" do
+      
+      before(:each) do
+        @attr = { :name => "New User", :email => "user@example.com", :password => "foobar", :password_confirmation => "foobar"}
+      end
+
+      it "should create a user" do
+        lambda do
+          post: create, :user => @attr # we use 'post :create' to hit the create action with an HTTP POST request
+        end.should change(User, :count).by(1) #asserts that the lambda block should change the User count by 1.
+      end
+
+      it "should redirect to the user show page" do
+        post :create, :user => @attr
+        response.should redirect_to(user_path(assigns(:user))) #(user_path(@user))
+      end
+
+      it "should have a welcome message" do
+        post :create, :user => @attr
+        flash[:success].should =˜ /welcome to the sample app/i #“equals-tilde” =~ operator for comparing strings to regular expressions. i is for a case-insensitive match
+      end
     end
   end
 end
