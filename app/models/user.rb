@@ -58,6 +58,11 @@ class User < ActiveRecord::Base
 		#If password mismatch, it will automatically return nil.
 	end
 
+	def self.authenticate_with_salt(id, cookie_salt)
+		user = find_by_id(id)
+		(user && user.salt == cookie_salt)? user : nil # Here it verifies that the salt stored in the cookie is the correct one for that user.
+	end
+
 
 	#EXERCISE 7.5.1: Copy each of the variants of the authenticate method from Listing 7.27 through Listing 7.31 into your User model, and verify that they are correct by running your test suite.
 

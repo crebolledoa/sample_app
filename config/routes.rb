@@ -1,8 +1,20 @@
 SampleApp::Application.routes.draw do
 
-  resources :users #automatically ensures that our Rails application responds to the RESTful URLs
+  get "sessions/new"
+
+  #provide URLs and actions similar to those for users
+  #resources ensure that a POST request to /users is handled by the create action.
+  resources :users
+  resources :sessions, :only => [:new, :create, :destroy]
+  #automatically ensures that our Rails application responds to the RESTful URLs
+  #In this case (Listing 9.1): 
+    #GET     /signin     new
+    #POST    /sessions   create 
+    #DELETE  /signout    destroy
 
   match '/signup', :to => 'users#new'
+  match '/signin', :to => 'sessions#new' 
+  match '/signout', :to => 'sessions#destroy' 
   match '/contact', :to => 'pages#contact'
   match '/about', :to => 'pages#about'
   match '/help', :to => 'pages#help'

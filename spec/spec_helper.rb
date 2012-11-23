@@ -95,6 +95,11 @@ RSpec.configure do |config|
   # Emulate initializer set_clear_dependencies_hook in
   # railties/lib/rails/application/bootstrap.rb
   ActiveSupport::Dependencies.clear
+
+# After running test_sign_in, the current_user will not be nil, so signed_in? will be true.
+  def test_sign_in(user)
+    controller.sign_in(user)
+  end
 end
 
 

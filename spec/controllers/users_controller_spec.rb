@@ -51,7 +51,22 @@ describe UsersController do
     	get :new
     	response.should have_selector("title", :content => "Sign up")
     end
-
+    it "should have a name field" do
+       get :new
+       response.should have_selector("input[name='user[name]'][type='text']")
+    end    
+    it "should have an email field" do
+       get :new
+       response.should have_selector("input[name='user[email]'][type='text']")
+    end
+    it "should have a password field" do
+       get :new
+       response.should have_selector("input[name='user[password]'][type='password']")
+    end
+    it "should have a password confirmation field" do
+       get :new
+       response.should have_selector("input[name='user[password_confirmation]'][type='password']")
+    end
   end
 
   describe "POST 'create'" do
@@ -63,7 +78,7 @@ describe UsersController do
       end
 
       it "should not create a user" do #verify that a failed create action doesn’t create a user in the database
-        lambda do #to wrap the post :create step in a package using a Ruby construct called a lambda,2 which allows us to check that it doesn’t change the User count
+        lambda do #to wrap the post :create step in a package using a Ruby construct called a lambda, which allows us to check that it doesn’t change the User count
           post :create, :user => @attr
         end.should_not change(User, :count) #change method to return the number of users in the database
       end
@@ -87,7 +102,7 @@ describe UsersController do
 
       it "should create a user" do
         lambda do
-          post: create, :user => @attr # we use 'post :create' to hit the create action with an HTTP POST request
+          post :create, :user => @attr # we use 'post :create' to hit the create action with an HTTP POST request
         end.should change(User, :count).by(1) #asserts that the lambda block should change the User count by 1.
       end
 
@@ -98,8 +113,15 @@ describe UsersController do
 
       it "should have a welcome message" do
         post :create, :user => @attr
-        flash[:success].should =˜ /welcome to the sample app/i #“equals-tilde” =~ operator for comparing strings to regular expressions. i is for a case-insensitive match
+        flash[:success].should =~ /welcome to the sample app/i #“equals-tilde” =~ operator for comparing strings to regular expressions. i is for a case-insensitive match
       end
+
+      #for new users so that they are automatically signed in
+      it "should sign the user in" do
+        post :create, :user => @attr
+        controller.should be_signed_in 
+      end
+
     end
   end
 end
