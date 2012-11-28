@@ -7,6 +7,7 @@ gem 'rails', '3.2.8'
 
 gem 'gravatar_image_tag'
 gem 'will_paginate'
+gem 'faker'
 
 group :production do
 	gem 'pg'
@@ -15,7 +16,6 @@ end
 group :development do
 	gem 'rspec-rails'
 	gem 'sqlite3'
-	gem 'faker'
 	gem "annotate", "~> 2.5.0"
 end
 
