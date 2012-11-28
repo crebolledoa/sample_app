@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'spork'
 #uncomment the following line to use spork with the debugger
-#require 'spork/ext/ruby-debug'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -106,7 +105,7 @@ RSpec.configure do |config|
     fill_in :email, :with => user.email
     fill_in :password, :with => user.password
     click_button
-  end
+  end 
 end
 
 

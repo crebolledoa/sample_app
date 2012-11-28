@@ -39,7 +39,6 @@ describe "LayoutLinks" do
 	end
 
 	it "should have the right links on the layout" do
-		#do
 		visit root_path
 
 		click_link "About"

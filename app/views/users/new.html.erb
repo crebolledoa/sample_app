@@ -1,6 +1,6 @@
 <h1>Sign up</h1>
 <%= form_for(@user) do |f| %>
-	<%= render 'shared/error_messages' %> <!-- -it renders the partial '_error_messages.html.erb'-->
+	<%= render 'shared/error_messages', :object => f.object %> <!-- -it renders the partial '_error_messages.html.erb'-->
 	<div class="field"> <!-- creates the HTML needed to make a labeled text field element appropriate for setting the name attribute of a User model. it ensures that a POST request to /users is handled by the create action.-->
 		<%= f.label :name %><br />
 		<%= f.text_field :name %>

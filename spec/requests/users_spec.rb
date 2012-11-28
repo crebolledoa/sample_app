@@ -43,6 +43,7 @@ describe "Users" do
 
 		describe "failure" do
 			it "should not sign a user in" do
+				#integration_sign_in(FactoryGirl.create(:user, :email => "", :password =>""))
 				visit signin_path
 				fill_in :email, :with => ""
 				fill_in :password, :with => ""

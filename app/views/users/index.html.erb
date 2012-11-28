@@ -1,0 +1,18 @@
+<h1>All users</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+	<%= render @users %>
+</ul>
+
+<%= will_paginate %>
+
+<!-- 
+	The will_paginate method is a little magical; inside a users view, it automatically looks for an @users object, and then displays pagination links to access other pages.
+
+	will_paginate expects an object of class WillPaginate::Collection, not an Array class object.
+
+
+	about render @users: Rails infers that @users is a list of User objects; moreover, when called with a collection of users, Rails automatically iterates through them and renders each one with the _user.html.erb partial.
+-->
