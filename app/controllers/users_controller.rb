@@ -15,21 +15,31 @@ class UsersController < ApplicationController
   end
 
   def new
-  	@user = User.new
-  	@title = "Sign up"
+    if !signed_in?
+    	@user = User.new
+    	@title = "Sign up"
+    else
+      flash[:notice] = "You are already logged in!"
+      redirect_to root_path
+    end
   end
 
   def create
-  	@user = User.new(params[:user]) #this is equivalent to: @user = User.new(:name => "Foo Bar", :email => "foo@invalid",:password => "dude", :password_confirmation => "dude")
-  	if @user.save
-      sign_in @user
-  		flash[:success] = "Welcome to the Sample App!"
-  		redirect_to user_path(@user)
-  	else
-  		@title = "Sign up"
-  		render 'new'
-  		@user.password = "" #clear the password field for failed submissions
-  	end 
+    if !signed_in?
+    	@user = User.new(params[:user]) #this is equivalent to: @user = User.new(:name => "Foo Bar", :email => "foo@invalid",:password => "dude", :password_confirmation => "dude")
+    	if @user.save
+        sign_in @user
+    		flash[:success] = "Welcome to the Sample App!"
+    		redirect_to user_path(@user)
+    	else
+    		@title = "Sign up"
+    		render 'new'
+    		@user.password = "" #clear the password field for failed submissions
+    	end 
+    else
+      flash[:notice] = "You are already logged in!"
+      redirect_to root_path
+    end
   end
 
   def edit
@@ -47,9 +57,14 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User destroyed."
-    redirect_to users_path
+    if current_user?(User.find(params[:id]))
+      flash[:error] = "You're destroying yourself, you can't do that!" 
+      redirect_to users_path
+    else
+      User.find(params[:id]).destroy
+      flash[:success] = "User destroyed."
+      redirect_to users_path
+    end
   end
 
   private

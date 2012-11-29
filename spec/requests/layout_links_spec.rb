@@ -64,6 +64,7 @@ describe "LayoutLinks" do
 
 		#the before(:each) block signs in by visiting the signin page and submitting a valid email/password pair
 		before(:each) do
+			#integration_sign_in(FactoryGirl.create(:user))
 			@user = FactoryGirl.create(:user)
 			visit signin_path
 			fill_in :email, :with => @user.email
@@ -79,5 +80,14 @@ describe "LayoutLinks" do
 			visit root_path
 			response.should have_selector("a", :href => user_path(@user), :content => "Profile")
 		end
+	end
+
+	describe "when a non-admin user is signed in" do
+		it "should not see the delete links" do
+			@user = FactoryGirl.create(:user)
+			visit users_path
+			response.should_not have_selector("a", :href => user_path(@user), :content => "delete")
+		end
+
 	end
 end

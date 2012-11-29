@@ -89,6 +89,17 @@ describe UsersController do
 
   describe "GET 'new'" do
 
+    describe "for signed-in users" do
+
+      it "should redirect to the root URL if signed-in user" do
+        @user = FactoryGirl.create(:user)
+        test_sign_in(@user)
+        get :new 
+        flash[:notice].should =~ /already/
+        response.should redirect_to(root_path)
+      end
+    end
+
     it "returns http success" do
       get :new
       response.should be_success
@@ -116,6 +127,17 @@ describe UsersController do
   end
 
   describe "POST 'create'" do
+
+    describe "for signed-in users" do
+
+      it "should redirect to the root URL if signed-in user" do
+        @user = FactoryGirl.create(:user)
+        test_sign_in(@user)
+        post :create,  :id => @user
+        flash[:notice].should =~ /already/
+        response.should redirect_to(root_path)
+      end
+    end
 
     describe "failure" do
 
@@ -306,8 +328,8 @@ describe UsersController do
     describe "as an admin user" do
       
       before(:each) do
-        admin = FactoryGirl.create(:admin)
-        test_sign_in(admin)
+        @admin = FactoryGirl.create(:admin)
+        test_sign_in(@admin)
       end
 
       it "should destroy the user" do
@@ -319,6 +341,14 @@ describe UsersController do
       it "should redirect to the users page" do
         delete :destroy, :id => @user
         response.should redirect_to(users_path)
+      end
+
+      it "should not be able to destroy itself" do
+        lambda do
+          delete :destroy, :id => @admin
+          flash[:error].should =~ /yourself/
+          response.should redirect_to(users_path)
+        end.should_not change(User, :count).by(-1)
       end
     end
   end
