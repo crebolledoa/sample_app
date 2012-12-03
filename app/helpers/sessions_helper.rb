@@ -65,6 +65,15 @@ module SessionsHelper
 		clear_return_to
 	end
 
+	def authenticate
+      deny_access unless signed_in?
+    end
+
+    def deny_access
+    	store_location
+    	redirect_to signin_path, :notice => "Please sign in to access this page."
+    end
+
 	private 
 		# We’ve made both store_location and clear_return_to private methods since they are never needed outside the Sessions helper.)
 		def store_location

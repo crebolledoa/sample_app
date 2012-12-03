@@ -158,6 +158,57 @@ describe User do
 			@user.should be_admin #the user should have an admin? boolean method.
 		end
 	end
+
+	describe "micropost associations" do
+		before(:each) do
+			@user = User.create(@attr)
+			@older_mp = FactoryGirl.create(:micropost, :user => @user, :created_at => 1.day.ago)
+			@newer_mp = FactoryGirl.create(:micropost, :user => @user, :created_at => 1.hour.ago)
+		end
+
+		it "should have a microposts attribute" do
+			@user.should respond_to(:microposts) 
+		end
+
+		it "should have the right microposts in the right order" do
+			@user.microposts.should == [@newer_mp, @older_mp] 
+		end
+
+		it "should destroy associated microposts" do
+			microposts = @user.microposts # = [@older_mp, @newer_mp]
+			@user.destroy
+			microposts.each do |micropost|
+				Micropost.find_by_id(micropost.id).should be_nil
+		end 
+		end
+	end
+
+	describe "micropost associations" do
+
+		before(:each) do
+			@user = User.create(@attr)
+			@mp1 = FactoryGirl.create(:micropost, :user => @user, :created_at => 1.day.ago)
+			@mp2 = FactoryGirl.create(:micropost, :user => @user, :created_at => 1.hour.ago)
+		end
+
+		describe "status feed" do
+
+			it "should have a feed" do
+				@user.should respond_to(:feed)
+			end
+			#.include? checks if an array includes the given element
+			it "should include the user's microposts" do
+				@user.feed.include?(@mp1).should be_true
+				@user.feed.include?(@mp2).should be_true
+			end
+
+			it "should not include a different user's microposts" do
+				mp3 = FactoryGirl.create(:micropost, 
+										 :user => FactoryGirl.create(:user))
+				@user.feed.include?(mp3).should be_false
+			end
+		end
+	end
 end
 
 

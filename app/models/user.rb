@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
 	attr_accessor :password #virtual password attribute
 	attr_accessible :email, :name, :password, :password_confirmation #useful for preventing a mass assigment vulnerability
 
+	has_many :microposts, :dependent => :destroy
+
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 
@@ -45,6 +47,15 @@ class User < ActiveRecord::Base
 						 :length => {:within => 6..40}
 
 	before_save :encrypt_password #this is a callback, which delegates the actual encryption to an encrypt method.
+
+
+
+	def feed
+		# # This is preliminary. See Chapter 12 for the full implementation.
+
+		# The question mark ensures that id is properly escaped before being included in the underlying SQL query, thereby avoiding a serious security hole called SQL injection.
+		Micropost.where("user_id = ?", id) # this whole line is equivalent to just write 'microposts'
+	end
 
 	#Return true if the user's password matches the submitted password.
 	def has_password?(submitted_password)

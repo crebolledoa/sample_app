@@ -7,10 +7,17 @@
 				<%= gravatar_for @user %>
 				<%= @user.name %>
 			</h1>
+			<% unless @user.microposts.empty? %>
+				<table class="microposts" summary="User microposts">
+					<%= render @microposts %>
+				</table>
+				<%= will_paginate @microposts %>
+			<% end %>
 		</td>
 		<td class="sidebar round">
 		<strong>Name</strong> <%= @user.name %><br />
-		<strong>URL</strong> <%= link_to user_path(@user), @user %> <!-- user_path(@user) is the link TEXT, while the address is just @user. In the context of a "link_to", Rails converts @user to the appropiate URL (@user is equivalent to user_path(@user)) -->
+		<strong>URL</strong> <%= link_to user_path(@user), @user %><br /> <!-- user_path(@user) is the link TEXT, while the address is just @user. In the context of a "link_to", Rails converts @user to the appropiate URL (@user is equivalent to user_path(@user)) -->
+		<strong>Microposts</strong> <%= @user.microposts.count %>
 		</td>
 	</tr>
 </table>
