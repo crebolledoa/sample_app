@@ -93,6 +93,24 @@ describe UsersController do
       response.should have_selector("span.content", :content => mp2.content)
     end
 
+    it "should display the micropost count" do
+      10.times{ FactoryGirl.create(:micropost, :user => @user, :content => "foo") }
+      get :show, :id => @user
+      response.should have_selector("td.sidebar", :content => @user.microposts.count.to_s)
+    end
+
+    it "should paginate microposts" do
+      35.times{ FactoryGirl.create(:micropost, :user => @user, :content => "foo") }
+      get :show, :id => @user
+      response.should have_selector('div.pagination')
+    end
+
+    it "should not have delete link for microposts not created by the current user" do
+      other_user = FactoryGirl.create(:user)
+      test_sign_in(@user)
+      get :show, :id => other_user
+      response.should_not have_selector("a", :content => "delete")
+    end
   end
 
   describe "GET 'new'" do
