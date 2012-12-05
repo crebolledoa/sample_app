@@ -4,14 +4,23 @@ SampleApp::Application.routes.draw do
 
   #provide URLs and actions similar to those for users
   #resources ensure that a POST request to /users is handled by the create action.
-  resources :users
-  resources :sessions, :only => [:new, :create, :destroy]
+
+  #the member method means that the routes respond to URLs containing the user id.
+
+  resources :users do
+    member do #'collection do' works without the id
+      get :following, :followers
+    end
+  end
+
+  resources :sessions,      :only => [:new, :create, :destroy]
   #automatically ensures that our Rails application responds to the RESTful URLs
   #In this case (Listing 9.1): 
     #GET     /signin     new
     #POST    /sessions   create 
     #DELETE  /signout    destroy
-  resources :microposts, :only => [:create, :destroy]
+  resources :microposts,      :only => [:create, :destroy]
+  resources :relationships,   :only => [:create, :destroy]
 
   #match '/users/:id/microposts', :to => 'microposts#index'
   match '/signup', :to => 'users#new'

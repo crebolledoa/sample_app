@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
+
+  before_filter :authenticate, :except => [:show, :new, :create]
   before_filter :correct_user, :only => [:edit, :update]
   before_filter :admin_user, :only => :destroy
   #by default, before filters apply to EVERY action in a controller, so here we restrict the filter to act only on the :edit and :update actions by passing the :only options hash.
@@ -66,6 +67,20 @@ class UsersController < ApplicationController
       flash[:success] = "User destroyed."
       redirect_to users_path
     end
+  end
+
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.following.paginate(:page => params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(:page => params[:page])
+    render 'show_follow'
   end
 
   private

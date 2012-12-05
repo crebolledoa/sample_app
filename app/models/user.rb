@@ -30,6 +30,11 @@ class User < ActiveRecord::Base
 	attr_accessible :email, :name, :password, :password_confirmation #useful for preventing a mass assigment vulnerability
 
 	has_many :microposts, :dependent => :destroy
+	has_many :relationships, :foreign_key => "follower_id", :dependent => :destroy
+	has_many :following, :through => :relationships, :source => :followed
+	# the class_name is included because otherwise Rails will look for a ReverseRelationship class, which doesn't exist:
+	has_many :reverse_relationships, :foreign_key => "followed_id", :class_name => "Relationship", :dependent => :destroy 
+	has_many :followers, :through => :reverse_relationships, :source => :follower
 
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -51,10 +56,7 @@ class User < ActiveRecord::Base
 
 
 	def feed
-		# # This is preliminary. See Chapter 12 for the full implementation.
-
-		# The question mark ensures that id is properly escaped before being included in the underlying SQL query, thereby avoiding a serious security hole called SQL injection.
-		Micropost.where("user_id = ?", id) # this whole line is equivalent to just write 'microposts'
+		Micropost.from_users_followed_by(self)
 	end
 
 	#Return true if the user's password matches the submitted password.
@@ -74,6 +76,22 @@ class User < ActiveRecord::Base
 		user = find_by_id(id)
 		(user && user.salt == cookie_salt)? user : nil # Here it verifies that the salt stored in the cookie is the correct one for that user.
 	end
+
+
+
+	def following?(followed)
+		relationships.find_by_followed_id(followed)
+	end
+
+	def follow!(followed)
+		relationships.create!(:followed_id => followed.id)
+	end
+
+	def unfollow!(followed)
+		relationships.find_by_followed_id(followed).destroy
+	end
+
+
 
 
 	#EXERCISE 7.5.1: Copy each of the variants of the authenticate method from Listing 7.27 through Listing 7.31 into your User model, and verify that they are correct by running your test suite.
